@@ -14,6 +14,7 @@
                         </div>
                     @endif
 
+                    @livewire('bulk-table')
                 </div>
             </div>
         </div>
