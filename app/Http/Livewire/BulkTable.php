@@ -29,6 +29,12 @@ class BulkTable extends Component
 
     public function render()
     {
+        $this->selectedCategory = $this->products
+            ->filter(fn($product) => $this->getSelectedProducts()->contains($product->id))
+            ->map(fn($product) => $product->category->id)
+            ->unique()
+            ->pipe(fn($categories) => $categories->count() === 1 ? $categories->first() : null);
+
         $this->bulkDisabled = $this->selectedProducts->filter(fn($p) => $p)->count() < 2;
 
         return view('livewire.bulk-table');
@@ -51,5 +57,10 @@ class BulkTable extends Component
             ->map(fn($product) => $product->id)
             ->flip()
             ->map(fn($product) => false);
+    }
+
+    private function getSelectedProducts()
+    {
+        return $this->selectedProducts->filter(fn($p) => $p)->keys();
     }
 }
